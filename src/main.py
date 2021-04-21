@@ -95,12 +95,7 @@ class Status:
 
 
 S = Status()
-def toString(arr):
-    list_string = []
-    for angka in arr:
-        list_string.append(str(angka))
-    return list_string
-print(toString([100,56,85,2711,9]))
+
 while(input!=0):
     line = input()
     if (S.isUpdate(line)):
@@ -110,9 +105,3 @@ while(input!=0):
         T = Task(line, S)
         S.addTask(T)
     S.printAllTask()
-
-def toString(arr):
-    list_string = []
-    for angka in arr:
-        list_string.append(str(angka))
-    return list_string
