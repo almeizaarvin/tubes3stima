@@ -1,16 +1,15 @@
 import re
 
 texttosearch = '''
-abcdefghijklmnopqrstuvwxyz
-
-BABA BIBI BOBO BABIBOBO
-
-ABCDEFGHIJKLMNOPQRSTUVWZYZ
-ABC
+22/30/2020
+aodshfoiawdsf
+21/12/2021
 '''
 
-pattern = re.compile(r'\BBOBO')
-matches = pattern.finditer(texttosearch)
+def extractDate(line):
+    re = __import__('re')
+    date  = re.findall(r'\b\d{2}[/]\d{2}[/]\d{4}\b', line)
 
-for m in matches:
-    print(m)
+    return date
+
+print(extractDate(texttosearch))
