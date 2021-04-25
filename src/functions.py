@@ -1,3 +1,5 @@
+import re
+
 global types
 types = ["Tucil", "Tubes", "Tugas", "PR", "Kuis", "Quiz", "Milestone"]
 
@@ -74,7 +76,6 @@ def printAllTask():
         print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.status)
 
 def extractDate(line):
-    re = __import__('re')
     pattern = re.findall(r'\b\d{2}[/]\d{2}[/]\d{4}\b', line)
 
     if(len(pattern)==1):
@@ -83,7 +84,6 @@ def extractDate(line):
         return pattern
 
 def extractSubject(line):
-    re = __import__('re')
     pattern = re.search(r'\b[a-zA-z]{2}\d{4}\b', line)
 
     start = pattern.span()[0]
@@ -93,8 +93,6 @@ def extractSubject(line):
     return subject
 
 def extractType(types, line):
-    re = __import__('re')
-        
     idx = -1
     for t in types:
         if (boyerMoore(line, t) != -1):
@@ -115,7 +113,6 @@ def extractTopic(line):
 
 #==================================FUNGSI UPDATE TASK=======================================
 def isUpdate(deadline, line):
-    re = __import__('re')
     for w in deadline:
         if(boyerMoore(line, w) != -1):
             return True
@@ -135,7 +132,6 @@ def isIDValid(taskList, id_):
     return False
 
 def findID(line):
-    re = __import__('re')
     pattern = re.search("task \d+", line, re.IGNORECASE)
     start = pattern.span()[0]
     stop = pattern.span()[1]
@@ -192,14 +188,13 @@ def markFinished(line):
 
 #===================================FUNGSI HELP ========================================
 def isHelpMenu(line):
-    re = __import__('re')
     for w in helpkeywords:
         if(boyerMoore(line, w) != -1):
             return True
     return False
 
 def helpMenu():
-    print("[FITUR]")
+    print("\n[FITUR]")
     print("1. Menambahkan task baru"+
     "\n2. Melihat daftar task yang harus dikerjakan"+
     "\n3. Menampilkan deadline dari suatu task tertentu"+
@@ -218,13 +213,18 @@ def helpMenu():
         print(deadline[i], end="")
         if i != len(deadline)-1 :
             print(", ", end="")
+
     print("\nSelesai task : ", end="")
     for i in range (0, len(finishkeywords)):
         print(finishkeywords[i], end="")
         if i != len(finishkeywords)-1 :
             print(", ", end="")
+
     print("\nNeed BoboBot Help ? ", end="")
     for i in range (0, len(helpkeywords)):
         print(helpkeywords[i], end="")
         if i != len(helpkeywords)-1 :
             print(", ", end="")
+            
+    print()
+    print()
