@@ -7,6 +7,11 @@ taskList = []
 global deadline
 deadline = ["Undur", "Maju"]
 
+global finishkeywords
+finishkeywords = ["Sudah", "Selesai", "Selesai", "Done", "Finished", "Kelar", "Beres"]
+
+global helpkeywords
+helpkeywords = ["Bisa", "Apa", "Asisten", "Assistant", "Help"]
 
 ##============================FUNGSI ALGORITMA BOYERMOORE=======================
 def lastOcc(arr, c):
@@ -66,7 +71,7 @@ def addTask(Task):
 
 def printAllTask():
     for Task in taskList:
-        print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type)
+        print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.status)
 
 def extractDate(line):
     re = __import__('re')
@@ -145,6 +150,7 @@ def findID(line):
     return id
 
 
+
 #==================================FUNGSI DLFINDER=======================================
 def isDLFinder(line):
     if(boyerMoore(line, "Deadline")!=-1 and extractSubject(line)!=None):
@@ -158,3 +164,67 @@ def DLFinder(taskList, line):
         if t.subject == subjectkey:
             return t.date
     return "Deadline tidak ditemukan"
+
+
+
+
+#===================================FUNGSI MARKFINISHED ========================================
+
+def isMarkFinished(line):
+    re = __import__('re')
+    for w in finishkeywords:
+        if(boyerMoore(line, w) != -1):
+            return True
+    return False
+
+def markFinished(line):
+    taskID = findID(line)
+    for t in taskList:
+        if(t.id == taskID):
+            t.status = "Finished"
+            return("Status task berhasil diperbaharui")
+            break
+    return("ID task tidak ditemukan!")
+
+
+
+
+
+#===================================FUNGSI HELP ========================================
+def isHelpMenu(line):
+    re = __import__('re')
+    for w in helpkeywords:
+        if(boyerMoore(line, w) != -1):
+            return True
+    return False
+
+def helpMenu():
+    print("[FITUR]")
+    print("1. Menambahkan task baru"+
+    "\n2. Melihat daftar task yang harus dikerjakan"+
+    "\n3. Menampilkan deadline dari suatu task tertentu"+
+    "\n4. Memperbaharui task tertentu"+
+    "\n5. Menandai bahwa suatu task sudah selesai dikerjakan\n")
+
+    print("[DAFTAR KEYWORD]")
+    print("Tipe task : ", end="")
+    for i in range (0, len(types)):
+        print(types[i], end="")
+        if i != len(types)-1 :
+            print(", ", end="")
+
+    print("\nDeadline task : ", end="")
+    for i in range (0, len(deadline)):
+        print(deadline[i], end="")
+        if i != len(deadline)-1 :
+            print(", ", end="")
+    print("\nSelesai task : ", end="")
+    for i in range (0, len(finishkeywords)):
+        print(finishkeywords[i], end="")
+        if i != len(finishkeywords)-1 :
+            print(", ", end="")
+    print("\nNeed BoboBot Help ? ", end="")
+    for i in range (0, len(helpkeywords)):
+        print(helpkeywords[i], end="")
+        if i != len(helpkeywords)-1 :
+            print(", ", end="")

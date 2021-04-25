@@ -9,6 +9,10 @@ def inputIdentify(deadline, types, line):
         return "Task"
     elif(isDLFinder(line)):
         return "DLFinder"
+    elif(isMarkFinished(line)):
+        return "MarkFinished"
+    elif(isHelpMenu(line)):
+        return "HelpMenu"
     else:
         print("Maaf, pesan tidak dikenali")
 
@@ -26,3 +30,7 @@ while(input!=0):
         printAllTask()
     elif(command =="DLFinder"):
         print(DLFinder(taskList, line))
+    elif(command =="MarkFinished"):
+        print(markFinished(line))
+    elif(command == "HelpMenu"):
+        helpMenu()
