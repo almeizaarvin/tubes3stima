@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+
 
 global types
 types = ["Tucil", "Tubes", "Tugas", "PR", "Kuis", "Quiz", "Milestone"]
@@ -14,6 +16,15 @@ finishkeywords = ["Sudah", "Selesai", "Selesai", "Done", "Finished", "Kelar", "B
 
 global helpkeywords
 helpkeywords = ["Bisa", "Apa", "Asisten", "Assistant", "Help"]
+
+global months
+months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+
+global topickeywords
+topickeywords = ["Topik", "Tentang", "BAB"]
+
+global datekeywords
+datekeywords = ["Pada", "Tanggal"]
 
 ##============================FUNGSI ALGORITMA BOYERMOORE=======================
 def lastOcc(arr, c):
@@ -56,14 +67,14 @@ def boyerMoore(line, pattern):
 class Task:
     def __init__(self, types, line):
         self.id= len(taskList) + 1
-        self.date= extractDate(line)
+        self.date= extractDate(line)[0]
         self.subject= extractSubject(line)
         self.type= extractType(types, line)
         self.topic= extractTopic(line)
         self.status="Unfinished"
 
 def isTask(types, line):
-    if(extractDate(line)!=None and extractSubject(line)!=None and extractType(types, line)!=None):
+    if(len(extractDate(line))!= None and extractSubject(line)!=None and extractType(types, line)!=None):
         return True
     else:
         return False
@@ -73,14 +84,24 @@ def addTask(Task):
 
 def printAllTask():
     for Task in taskList:
-        print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.status)
+        print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+
+def printAllDeadline():
+    for Task in taskList:
+        if Task.status == "Unfinished":
+            print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
 
 def extractDate(line):
-    pattern = re.findall(r'\b\d{2}[/]\d{2}[/]\d{4}\b', line)
-
-    if(len(pattern)==1):
-        return pattern[0]
-    elif(len([pattern])>1):
+    pattern = extractDateFormat1(line)
+    if(len(pattern) == 0):
+        pattern = extractDateFormat2(line)
+    if (len(pattern) == 0):
+        return
+    if(len(pattern) > 0):
+        for p in pattern:
+            if (not isDateValid(p)):
+                print("Tanggal tidak valid")
+                return
         return pattern
 
 def extractSubject(line):
@@ -102,13 +123,136 @@ def extractType(types, line):
 
     if(idx != -1):
         return line[idx:idx+len(keyword)]
- 
 
 def extractTopic(line):
-    return ""
+    for w in topickeywords:
+        if (boyerMoore(line, w) != -1):
+            idx = boyerMoore(line, w)
+            keyword = w
+            startTopic = idx
+            if (w != "BAB"):
+                startTopic = idx+len(w)
+            break
+    for w in datekeywords:
+        if (boyerMoore(line, w) != -1):
+            idx = boyerMoore(line, w)
+            keyword = w
+            stopTopic = idx
+        else:
+            stopTopic = searchIdxDate(line)
+
+    topic = line[startTopic:stopTopic-1]
+    return topic
 
 
 
+#=================================FUNGSI-FUNGSI DATE==================================
+#1. Getter
+
+def getTodayDate():
+    return datetime.now().date().strftime("%d/%m/%Y")
+
+def getDay(date):
+    day,month,year = date.split('/')
+    return day
+
+def getMonth(date):
+    day,month,year = date.split('/')
+    return month
+
+def getYear(date):
+    day,month,year = date.split('/')
+    return year
+
+    
+#############
+#2. Date operations
+
+
+
+
+
+#############
+#3. Date format converter 
+
+def extractDateFormat1(line):
+    listofDate = []
+    pattern = re.findall(r'\b\d+[/ -]\d+[/ -]\d{4}\b', line)
+    print(pattern)
+    for p in pattern:
+        p = p.replace('-','/')
+        p = p.replace(' ','/')
+        p = changeFormatDate1(p)
+        listofDate.append(p)
+    return listofDate
+
+def extractDateFormat2(line):
+    listofDate = []
+    for m in months:
+        if (boyerMoore(line, m) != -1):
+            raw_m = r"{}".format(m)
+            pattern = re.findall(r'\d+[/ -]'+raw_m+r'[/ -]\d{4}', line)
+            for p in pattern:
+                p = changeFormatDate2(p)
+                listofDate.append(p)
+    return listofDate
+
+def getMonthIdx(date):
+    #mengembalikan nama bulan sebagai angka
+    for i in range(12):
+        pattern = re.findall(months[i], date, re.IGNORECASE)
+        if (len(pattern) == 1):
+            month = str(i+1)
+            month = makeTwoDigits(month)
+            return month
+
+def changeFormatDate1(or_date):
+    #get day,month,year
+    day,month,year = or_date.split('/')
+    month = makeTwoDigits(month)
+    day = makeTwoDigits(day)
+    #formating
+    formatted_date = day+'/'+month+'/'+year
+    return formatted_date
+
+def makeTwoDigits(char_int):
+    #formating angka biar dua digit
+    if (int(char_int) < 10 and char_int[0] != '0'):
+        number = '0'+char_int
+    else:
+        number = char_int
+    return number
+
+def changeFormatDate2(or_date):
+    #get year
+    year = or_date[-4:]
+    #get month
+    month = getMonthIdx(or_date)
+    #get date
+    day_raw = re.findall(r'\d+', or_date[0:2])
+    date = makeTwoDigits(day_raw[0])
+    #formating
+    formatted_date = date+'/'+month+'/'+year
+    return formatted_date
+
+def isDateValid(date):
+    isValid = True
+    day,month,year = date.split('/')
+    try :
+        datetime(int(year),int(month),int(day))
+    except ValueError :
+        isValid = False
+    return isValid
+
+def searchIdxDate(line):
+    pattern = re.search(r'\b\d+[/ -]\d+[/ -]\d{4}\b', line)
+    if (pattern == None):
+        for m in months:
+            if (boyerMoore(line, m) != -1):
+                raw_m = r"{}".format(m)
+                pattern = re.search(r'\d+[/ -]'+raw_m+r'[/ -]\d{4}', line)
+    return pattern.span()[0]
+    
 
 
 #==================================FUNGSI UPDATE TASK=======================================
@@ -120,9 +264,10 @@ def isUpdate(deadline, line):
 
 def updateDL(taskList, line, id_):
     if (isIDValid(taskList, id_)):
-        new_date = extractDate(line)
-        taskList[id_-1].date = new_date
-        print("Deadline Task " + str(id_) + " berhasil di-update")
+        if(extractDate(line != None)):
+            new_date = extractDate(line)[0]
+            taskList[id_-1].date = new_date
+            print("Deadline Task " + str(id_) + " berhasil di-update")
     else:
         print("ID tidak valid")
 
@@ -156,12 +301,72 @@ def isDLFinder(line):
 
 def DLFinder(taskList, line):
     subjectkey = extractSubject(line)
+    # 2.b.i Periode DATE_1 sampai DATE_2
+    DLFinderBetweenDates()
+    
+    # 2.b.ii N minggu
+    DLFinderByWeeks()
+    
+    # 2.b.iii N hari
+    DLFinderByDays()
+    # 2.b.iv Hari ini BERES
+    DLToday()
+
+    # 3. Ada task BERES
     for t in taskList:
         if t.subject == subjectkey:
             return t.date
-    return "Deadline tidak ditemukan"
+
+    # 2.a semua deadline BERES
+    return printAllDeadline()
+    
+
+def getNweeks(line):
+    pattern = re.search("\d+ minggu", line, re.IGNORECASE)
+    if(pattern==None):
+        return -1
+    else:
+        start = pattern.span()[0]
+        stop = pattern.span()[1]
+        string = line[start:stop]
+
+        angka = re.findall("\d", string)
+        n = 0
+        satuan = 10**(len(angka)-1)
+        for i in range (len(angka)):
+            n += int(angka[i])*satuan
+            satuan/10
+        return n
+
+def getNdays(line):
+    pattern = re.search("\d+ hari", line, re.IGNORECASE)
+    if(pattern==None):
+        return -1
+    else:
+        start = pattern.span()[0]
+        stop = pattern.span()[1]
+        string = line[start:stop]
+
+        angka = re.findall("\d", string)
+        n = 0
+        satuan = 10**(len(angka)-1)
+        for i in range (len(angka)):
+            n += int(angka[i])*satuan
+            satuan/10
+        return n
 
 
+def DLToday():
+    for t in taskList:
+        if(t.date == getTodayDate()):
+            print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+
+            
+def DLFinderByWeeks(line):
+    todayDate = getTodayDate()
+    daysToGo = getNweeks(line) * 7
+    
+            
 
 
 #===================================FUNGSI MARKFINISHED ========================================
