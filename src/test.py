@@ -27,6 +27,8 @@ aodshfoiawdsf
 '''
 
 months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+topickeywords = ["Topik", "Tentang", "BAB"]
+datekeywords = ["Pada", "Tanggal"]
 
 from datetime import date
 today = date.today()
@@ -79,7 +81,6 @@ def extractDate(line):
 def extractDateFormat1(line):
     listofDate = []
     pattern = re.findall(r'\b\d+[/ -]\d+[/ -]\d{4}\b', line)
-    print(pattern)
     for p in pattern:
         p = p.replace('-','/')
         p = p.replace(' ','/')
@@ -145,6 +146,7 @@ def isDateValid(date):
         isValid = False
     return isValid
 
+
 def searchIdxDate(line):
     pattern = re.search(r'\b\d+[/ -]\d+[/ -]\d{4}\b', line)
     if (pattern == None):
@@ -152,14 +154,36 @@ def searchIdxDate(line):
             if (boyerMoore(line, m) != -1):
                 raw_m = r"{}".format(m)
                 pattern = re.search(r'\d+[/ -]'+raw_m+r'[/ -]\d{4}', line)
-    print(pattern.span())
-    return pattern.span()
+    return pattern.span()[0]
 
+def extractTopic(line):
+    found = False
+    for w in topickeywords:
+        if (boyerMoore(line, w) != -1):
+            idx = boyerMoore(line, w)
+            keyword = w
+            startTopic = idx
+            if (w != "BAB"):
+                startTopic = idx+len(w)+1
+            break
+    for w in datekeywords:
+        if (boyerMoore(line, w) != -1):
+            idx = boyerMoore(line, w)
+            keyword = w
+            stopTopic = idx
+            found = True
+            break
+    if(not found):
+        stopTopic = searchIdxDate(line)
 
+    topic = line[startTopic:stopTopic-1]
+    return topic
+
+text = "tubes IF2002 BAB 1 sampai 2 29/04/2021"
 #date = extractDate(texttosearch3)
-date = extractDate(texttosearch2)
+date = extractDate(text)
 print(date)
-print(searchIdxDate(date[0]))
+print(extractTopic(text))
 """ print(changeFormatDate2(date[1]))
 print(isDateValid(changeFormatDate2(date[1])))
 print('29/02/2021')
