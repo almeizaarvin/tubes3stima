@@ -1,2 +1,2 @@
-web: python src.Bobobot.py runserver 0.0.0.0:$PORT
+web: gunicorn src.Bobobot.wsgi --log-file -
 
