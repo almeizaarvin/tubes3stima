@@ -29,32 +29,32 @@ def inputIdentify(deadline, types, line):
     elif(isHelpMenu(line)):
         return "HelpMenu"
     else:
-        print("Maaf, pesan tidak dikenali")
+        return "Hah? Gimana? Ngomong apa? Coba ketik 'help' biar tau..."
 
 #/////////////////////////////
 
 #while(input!=0):
-    line = input()
-    command = inputIdentify(deadline, types, line)
-    if(command == "UpdateDL"):
-        idToUpdate = findID(line)
-        print(updateDL(taskList, line, idToUpdate))
-    elif(command == "Task"):
-        T = Task(types, line)
-        print(addTask(T))
-    elif(command=="DLUntilNow"):
-        print(printAllDeadline(line))
-    elif(command =="DLFinderBySubject"):
-        print(DLFinderBySubject(line))
-    elif(command == "DLFinderBetweenDates"):
-        print(DLFinderBetweenDates(line))
-    elif(command == "DLFinderByWeeks"):
-        print(DLFinderByWeeks(line))
-    elif(command == "DLFinderByDays"):
-        print(DLFinderByDays(line))
-    elif(command =="DLToday"):
-        print(DLToday(line))
-    elif(command =="MarkFinished"):
-        print(markFinished(line))
-    elif(command == "HelpMenu"):
-        print(helpMenu())
+    # line = input()
+    # command = inputIdentify(deadline, types, line)
+    # if(command == "UpdateDL"):
+    #     idToUpdate = findID(line)
+    #     print(updateDL(taskList, line, idToUpdate))
+    # elif(command == "Task"):
+    #     T = Task(types, line)
+    #     print(addTask(T))
+    # elif(command=="DLUntilNow"):
+    #     print(printAllDeadline(line))
+    # elif(command =="DLFinderBySubject"):
+    #     print(DLFinderBySubject(line))
+    # elif(command == "DLFinderBetweenDates"):
+    #     print(DLFinderBetweenDates(line))
+    # elif(command == "DLFinderByWeeks"):
+    #     print(DLFinderByWeeks(line))
+    # elif(command == "DLFinderByDays"):
+    #     print(DLFinderByDays(line))
+    # elif(command =="DLToday"):
+    #     print(DLToday(line))
+    # elif(command =="MarkFinished"):
+    #     print(markFinished(line))
+    # elif(command == "HelpMenu"):
+    #     print(helpMenu())

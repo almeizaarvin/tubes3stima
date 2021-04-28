@@ -31,7 +31,7 @@ untilnowkeywords = []
 #============================FUNGSI READFILE DAN GENERATE KEYWORDS============================
 # Membaca masukan dari file txt
 def readFile(filename):
-    filename='../test/'+filename
+    filename='test/'+filename
     with open(filename) as f:
         lines = f.read().splitlines()
     return lines
@@ -252,7 +252,7 @@ def turnToArr(taskList):
     return arr_task
 
 def writeFile(arr_tasklist):
-    f1=open('../test/taskList.txt', 'w')
+    f1=open('test/taskList.txt', 'w')
     for task in arr_tasklist:
         f1.write(task + "\n")
 
@@ -419,8 +419,8 @@ def isUpdate(deadline, line):
     except:
         pass
 
-def updateDL(taskList, line, id_):
-    if (isIDValid(taskList, id_)):
+def updateDL(line, id_):
+    if (isIDValid(id_)):
         if(extractDate(line) != None):
             new_date = extractDate(line)[0]
             taskList[id_-1].date = new_date
@@ -429,7 +429,7 @@ def updateDL(taskList, line, id_):
     else:
         return("ID tidak valid<br>")
 
-def isIDValid(taskList, id_):
+def isIDValid(id_):
     if (id_>0) and (id_-1 < len(taskList)):
         return True
     return False
@@ -643,7 +643,7 @@ def helpMenu():
     "<br>4. Memperbaharui task tertentu"+
     "<br>5. Menandai bahwa suatu task sudah selesai dikerjakan<br>")
 
-    string += "[DAFTAR KEYWORD]<br>"
+    string += "<br>[DAFTAR KEYWORD]<br>"
     string += "Tipe task : "
     for i in range (0, len(types)):
         string += types[i]
