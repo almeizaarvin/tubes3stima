@@ -1,5 +1,11 @@
 from functions import *
 
+
+types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords = generateKeywords(types, deadline, finishkeywords, 
+                                                                                                            helpkeywords, months, topickeywords, datekeywords, untilnowkeywords)
+
+taskList = makeTaskList(readFile("taskList.txt"))
+
 #////////////////////////////////
 def inputIdentify(deadline, types, line):
     if(isUpdate(deadline, line)):
@@ -7,16 +13,16 @@ def inputIdentify(deadline, types, line):
     elif(isTask(types, line)):
         return "Task"
     elif(isDLUntilNow(line)):
-        return "UntilNow"
+        return "DLUntilNow"
     elif(isDLFinderBySubject(line)):
         return "DLFinderBySubject"
     elif(isDLFinderBetweenDates(line)):
         return "DLFinderBetweenDates"
-    elif(isDLFinderByWeeks):
+    elif(isDLFinderByWeeks(line)):
         return "DLFinderByWeeks"
-    elif(isDLFinderByDays):
-        return "DLFinderByDay"
-    elif(isDLToday):
+    elif(isDLFinderByDays(line)):
+        return "DLFinderByDays"
+    elif(isDLToday(line)):
         return "DLToday"    
     elif(isMarkFinished(line)):
         return "MarkFinished"
@@ -38,9 +44,9 @@ while(input!=0):
         addTask(T)
         printAllTask()
     elif(command=="DLUntilNow"):
-        printAllDeadline()
+        printAllDeadline(line)
     elif(command =="DLFinderBySubject"):
-        print(DLFinder(taskList, line))
+        DLFinderBySubject(line)
     elif(command == "DLFinderBetweenDates"):
         DLFinderBetweenDates(line)
     elif(command == "DLFinderByWeeks"):

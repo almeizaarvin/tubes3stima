@@ -1,5 +1,5 @@
 import re
- 
+from functions import *
 import datetime
 
 texttosearch = '''
@@ -179,12 +179,33 @@ def extractTopic(line):
     topic = line[startTopic:stopTopic-1]
     return topic
 
-text = "tubes IF2002 BAB 1 sampai 2 29/04/2021"
+def writeFile(tasklist):
+    f1=open('../test/taskList.txt', 'w')
+    for task in tasklist:
+        f1.write(task + "\n")
+
+#text = "tubes IF2002 BAB 1 sampai 2 29/04/2021"
 #date = extractDate(texttosearch3)
-date = extractDate(text)
-print(date)
-print(extractTopic(text))
+#date = extractDate(text)
+#print(date)
+#print(extractTopic(text))
 """ print(changeFormatDate2(date[1]))
 print(isDateValid(changeFormatDate2(date[1])))
 print('29/02/2021')
 print(isDateValid('29/02/2021')) """
+
+
+task = ["1-10/05/2021-IF2222-Tubes-Bab 2-Unfinished" , "3-03/05/2021-IF5050-PR-abc-Unfinished"]
+
+writeFile(task)
+
+def makeTaskList(task):
+    taskList = []
+    for line in lines:
+        pattern = re.findall(r'-\w-', line)
+        topic = pattern[3]
+        T = Task(types,task + " "+ topic)
+        pattern = re.findall(r'-\w', line)
+        T.status = pattern[len(pattern-1)]
+        taskList.append(T)
+    return taskList
