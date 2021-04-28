@@ -103,7 +103,7 @@ body {
 .logo {
   font-weight: bold;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   text-align: center;
   color: cyan;
   background-color: #141418;

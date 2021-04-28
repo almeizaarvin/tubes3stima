@@ -16,9 +16,16 @@
 	<nav class="navbar">
 		<ul class="navbar-nav">
 			<li class="logo">
-				<a href="#" class="nav-link">
+				<a href="{{ url_for('home') }}" class="nav-link">
 					<span class="link-text logo-text">BoboBot</span>
 					<i class="fa fa-angle-double-right fa-lg"></i>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a href="#" class="nav-link">
+					<i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>
+					<span class="link-text">About</span>
 				</a>
 			</li>
 
@@ -35,13 +42,6 @@
 					<span class="link-text">Spek</span>
 				</a>
 			</li>
-
-			<li class="nav-item">
-				<a href="#" class="nav-link">
-					<i class="fa fa-hashtag fa-lg" aria-hidden="true"></i>
-					<span class="link-text">Bye!</span>
-				</a>
-			</li>
 		</ul>
 	</nav>
 
@@ -56,7 +56,7 @@
 		<main class="msger-chat">
 			<!-- Bot text  -->
 			<div class="msg left-msg">
-				<div class="msg-img" style="background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg)"></div>
+				<div class="msg-img" style="background-image: url(../static/img/bot-avatar.gif)"></div>
 
 				<div class="msg-bubble">
 					<div class="msg-info">
@@ -65,7 +65,7 @@
 					</div>
 
 					<div class="msg-text">
-						Halo! Selamat datang di BoboBot.
+						Halo! Saya BoboBot, bot untuk pengingat deadline, tapi ingat ajal juga jangan lupa. Silakan ketik 'help' untuk mengetahui kata kunci dan commands yang tersedia.
 					</div>
 				</div>
 			</div>
@@ -87,8 +87,7 @@
 		const msgerInput = get(".msger-input");
 		const msgerChat = get(".msger-chat");
 
-		// Icons made by Freepik from www.flaticon.com
-		const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
+		const BOT_IMG = "../static/img/bot-avatar.gif";
 		const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
 		const BOT_NAME = "BoboBot";
 		const PERSON_NAME = "You";
