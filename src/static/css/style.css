@@ -19,9 +19,9 @@ html {
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* display: flex; */
+  /* justify-content: center;
+  align-items: center; */
   height: 100vh;
   background-image: url("../img/stars-bg.jpg");
   background-attachment: fixed;
@@ -33,10 +33,116 @@ body {
   font-family: Helvetica, sans-serif;
 }
 
+.navbar {
+  width: 4rem;
+  height: 100vh;
+  position: fixed;
+  background-color: #23232e;
+  transition: 200ms ease;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-item:last-child {
+  margin-top: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: #aaa;
+  text-decoration: none;
+  filter: grayscale(100%) opacity(0.7);
+  transition: 600ms;
+}
+
+.nav-link:hover {
+  filter: grayscale(0%) opacity(1);
+  background-color: #141418;
+  color: #f5f7fa;
+}
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+}
+
+.nav-link svg {
+  min-width: 2rem;
+  margin: 0 1rem; 
+}
+
+.navbar:hover {
+  width: 12rem;
+}
+
+.navbar:hover .link-text {
+  display: inline;
+}
+
+.fa-lg {
+  color: #8dff7e;
+  transition: 600ms;
+}
+
+.logo {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: cyan;
+  background-color: #141418;
+  letter-spacing: 0.3ch;
+  width: 100%;
+}
+
+.logo svg {
+  transition: 600ms;
+}
+
+.logo-text {
+  display: inline;
+  position: absolute;
+  left: -999px;
+  transition: 600ms;
+}
+
+.navbar:hover .logo-text {
+  left: 0px;
+}
+
+.navbar:hover .logo svg {
+  transform: rotate(-180deg);
+  color: #8dff7e;
+  margin-left: 9rem;
+}
+
+.logo .nav-link:hover svg {
+  color: crimson;
+}
+
 .msger {
   display: flex;
   flex-flow: column wrap;
   justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -54%);
   width: 100%;
   max-width: 867px;
   margin: 25px 10px;
