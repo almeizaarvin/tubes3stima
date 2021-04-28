@@ -127,7 +127,9 @@ def addTask(Task):
     if(not isTaskinTasklist(Task)):
         taskList.append(Task)
     else:
-        print("Task sudah tercatat!")
+        result = "Task sudah tercatat!"
+        result += "<br>"
+        return(result)
 
 def isTaskinTasklist(Task):
     for t in taskList:
@@ -138,27 +140,32 @@ def isTaskinTasklist(Task):
 def printAllTask():
     today_date = getTodayDate()
     empty = True
+    string = ''
     for Task in taskList:
         if isBefore(today_date, Task.date):
             empty = False
-            print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+            string += str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status
+            string += "<br>"
     if(empty):
-        print("Kamu tidak memiliki deadline task apapun!")
+        string = "Kamu tidak memiliki deadline task apapun!<br>"
+    return string
 
 def printAllDeadline(line):
     type_ = extractType(line)
     today_date = getTodayDate()
     empty = True
+    string = ''
     for Task in taskList:
         if Task.status == "Unfinished" and isBefore(today_date, Task.date):
             if (type_ != None and type_.lower() == Task.type.lower()):
                 empty = False
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string += str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
             elif (type_ == None):
                 empty = False
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string += str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
     if(empty):
-        print("Kamu tidak memiliki deadline task yang belum selesai!")    
+        string = "Kamu tidak memiliki deadline task apapun!<br>"
+    return string  
 
 def extractDate(line):
     try:
@@ -170,8 +177,7 @@ def extractDate(line):
         if(len(pattern) > 0):
             for p in pattern:
                 if (not isDateValid(p)):
-                    print("Tanggal tidak valid")
-                    return
+                    return None
             return pattern
     except:
         return None
@@ -416,9 +422,10 @@ def updateDL(taskList, line, id_):
         if(extractDate(line) != None):
             new_date = extractDate(line)[0]
             taskList[id_-1].date = new_date
-            print("Deadline Task " + str(id_) + " berhasil di-update")
+            return("Deadline Task " + str(id_) + " berhasil di-update<br>")
+        return("Deadline Task " + str(id_) + " tidak berhasil di-update<br>")
     else:
-        print("ID tidak valid")
+        return("ID tidak valid<br>")
 
 def isIDValid(taskList, id_):
     if (id_>0) and (id_-1 < len(taskList)):
@@ -514,10 +521,12 @@ def DLFinderBySubject(line):
                 empty = False
                 deadline_subject.append(t)
     if(not empty):
+        string = ""
         for d in deadline_subject:
-            print(str(d.id)+" - "+d.date+" - "+d.status)
+            string+=str(d.id)+" - "+d.date+" - "+d.status+"<br>"
     else:
-        print("Kamu tidak memiliki deadline task!")
+        string = "Kamu tidak memiliki deadline task!"
+    return string
 
  # 2.b.i Periode DATE_1 sampai DATE_2
 def DLFinderBetweenDates(line):
@@ -526,30 +535,32 @@ def DLFinderBetweenDates(line):
     empty = True
     if(not isBefore(dates[0], dates[1])):
         dates[1], dates[0] = dates[0], dates[1]
-
+    string = ""
     for Task in taskList:
         if(isBefore(dates[0],Task.date) and isBefore(Task.date, dates[1])):
             empty = False
             if (type_  != None and type_  == type_.lower() == Task.type.lower()):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
             elif (type_  == None):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
     if(empty):
-        print("Kamu tidak memiliki deadline task!")
+        string = "Kamu tidak memiliki deadline task!"
+    return string
                 
 def DLToday(line):
     type_ = extractType(line)
     empty = True
+    string = ""
     for Task in taskList:
         if(Task.date == getTodayDate()):
             empty = False
             if(type_ != None and type_ == type_.lower() == Task.type.lower()):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
             elif(type_ == None):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
     if(empty):
-        print("Kamu tidak memiliki deadline task!")
-
+        string = "Kamu tidak memiliki deadline task!"
+    return string
 
 def DLFinderByWeeks(line):
     type_ = extractType(line)
@@ -557,15 +568,17 @@ def DLFinderByWeeks(line):
     boundaryDate = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
     today_date = getTodayDate()
     empty = True
+    string = ""
     for Task in taskList:
         if(isBefore(Task.date, boundaryDate) and isBefore(today_date, Task.date)):
             empty = False
             if (type_ != None and type_.lower() == Task.type.lower()):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
             elif (type_ == None):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
     if(empty):
-        print("Kamu tidak memiliki deadline task!")
+        string = "Kamu tidak memiliki deadline task!"
+    return string
 
 def DLFinderByDays(line):
     type_ = extractType(line)
@@ -573,16 +586,17 @@ def DLFinderByDays(line):
     boundaryDate = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
     today_date = getTodayDate()
     empty = True
+    string = ""
     for Task in taskList:
         if(isBefore(Task.date, boundaryDate) and isBefore(today_date, Task.date)):
             empty = False
             if (type_ != None and type_.lower() == Task.type.lower()):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
             elif (type_ == None):
-                print(str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status)
+                string = str(Task.id)+" - "+Task.date+" - "+Task.subject+" - "+Task.type+" - "+Task.topic+" - "+Task.status+"<br>"
     if(empty):
-        print("Kamu tidak memiliki deadline task!")
-
+        string = "Kamu tidak memiliki deadline task!"
+    return string
 
 #===================================FUNGSI MARKFINISHED ========================================
 
@@ -619,37 +633,37 @@ def isHelpMenu(line):
         pass
 
 def helpMenu():
-    print("\n[FITUR]")
-    print("1. Menambahkan task baru"+
-    "\n2. Melihat daftar task yang harus dikerjakan"+
-    "\n3. Menampilkan deadline dari suatu task tertentu"+
-    "\n4. Memperbaharui task tertentu"+
-    "\n5. Menandai bahwa suatu task sudah selesai dikerjakan\n")
+    string = ""
+    string += "[FITUR]<br>"
+    string += ("1. Menambahkan task baru"+
+    "<br>2. Melihat daftar task yang harus dikerjakan"+
+    "<br>3. Menampilkan deadline dari suatu task tertentu"+
+    "<br>4. Memperbaharui task tertentu"+
+    "<br>5. Menandai bahwa suatu task sudah selesai dikerjakan<br>")
 
-    print("[DAFTAR KEYWORD]")
-    print("Tipe task : ", end="")
+    string += "[DAFTAR KEYWORD]<br>"
+    string += "Tipe task : "
     for i in range (0, len(types)):
-        print(types[i], end="")
+        string += types[i]
         if i != len(types)-1 :
-            print(", ", end="")
+            string +=", "
 
-    print("\nDeadline task : ", end="")
+    string+="<br>Deadline task : "
     for i in range (0, len(deadline)):
-        print(deadline[i], end="")
+        string+=deadline[i]
         if i != len(deadline)-1 :
-            print(", ", end="")
+            string += ", "
 
-    print("\nSelesai task : ", end="")
+    string+="<br>Selesai task : "
     for i in range (0, len(finishkeywords)):
-        print(finishkeywords[i], end="")
+        string+=finishkeywords[i]
         if i != len(finishkeywords)-1 :
-            print(", ", end="")
+            string+=", "
 
-    print("\nNeed BoboBot Help ? ", end="")
+    string+="<br>Need BoboBot Help ? "
     for i in range (0, len(helpkeywords)):
-        print(helpkeywords[i], end="")
+        string+=helpkeywords[i]
         if i != len(helpkeywords)-1 :
-            print(", ", end="")
+            string+=", "
             
-    print()
-    print()
+    return string
