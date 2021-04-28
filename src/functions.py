@@ -31,7 +31,7 @@ untilnowkeywords = []
 #============================FUNGSI READFILE DAN GENERATE KEYWORDS============================
 # Membaca masukan dari file txt
 def readFile(filename):
-    filename='../test/'+filename
+    filename='test/'+filename
     with open(filename) as f:
         lines = f.read().splitlines()
     return lines
@@ -255,7 +255,7 @@ def turnToArr(taskList):
     return arr_task
 
 def writeFile(arr_tasklist):
-    f1=open('../test/taskList.txt', 'w')
+    f1=open('test/taskList.txt', 'w')
     for task in arr_tasklist:
         f1.write(task + "\n")
 
