@@ -1,1 +1,1 @@
-web:gunicorn --pythonpath src Bobobot
+web:gunicorn app: src Bobobot
