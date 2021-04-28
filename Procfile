@@ -1,1 +1,2 @@
-web: sh -c 'cd ./src/ && exec gunicorn src Bobobot'
+web: gunicorn src.Bobobot:app
+
