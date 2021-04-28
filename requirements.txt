@@ -12,7 +12,6 @@ keyring==10.6.0
 keyrings.alt==3.0
 MarkupSafe==1.1.1
 numpy==1.16.6
-pygobject==3.26.1
 pyxdg==0.25
 requests==2.25.1
 SecretStorage==2.3.1
