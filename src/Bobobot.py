@@ -14,16 +14,13 @@ def get_bot_response():
     line = request.args.get('msg')
     command = inputIdentify(deadline, types, line)
     botmsg = ""
-    # if command != None:
-    #     botmsg = "[" + command + "]<br>"
     if(command == "UpdateDL"):
         idToUpdate = findID(line)
         botmsg += updateDL(line, idToUpdate)
         writeFile(turnToArr(taskList))
     elif(command == "Task"):
         T = Task(types, line)
-        addTask(T)
-        botmsg += printAllTask()
+        botmsg += addTask(T)
         writeFile(turnToArr(taskList))
     elif(command=="DLUntilNow"):
         botmsg += printAllDeadline(line)

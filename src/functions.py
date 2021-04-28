@@ -124,14 +124,15 @@ def isTask(types, line):
         pass
 
 def addTask(Task):
+    result = ""
     if(not isTaskinTasklist(Task)):
         taskList.append(Task)
-        result = "Task berhasil dicatat<br>"
+        result = "[TASK BERHASIL DICATAT]<br>"
         result += printAllTask()
     else:
         result = "Task sudah tercatat!"
         result += "<br>"
-        return(result)
+    return(result)
 
 def isTaskinTasklist(Task):
     for t in taskList:
@@ -140,7 +141,8 @@ def isTaskinTasklist(Task):
     return False
 
 def printAllTask():
-    today_date = getTodayDate()
+    daysToGo =  1
+    today_date = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
     empty = True
     string = "[All Task]<br>"
     for Task in taskList:
@@ -154,7 +156,8 @@ def printAllTask():
 
 def printAllDeadline(line):
     type_ = extractType(line)
-    today_date = getTodayDate()
+    daysToGo =  1
+    today_date = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
     empty = True
     string = "[Deadline List]<br>"
     for Task in taskList:
@@ -414,7 +417,9 @@ def isUpdate(deadline, line):
     try:
         for w in deadline:
             if(boyerMoore(line, w) != -1):
-                return True
+                pattern = re.search("task \d+", line, re.IGNORECASE)
+                if (pattern != None):
+                    return True
         return False
     except:
         pass
@@ -568,7 +573,8 @@ def DLFinderByWeeks(line):
     type_ = extractType(line)
     daysToGo = getNweeks(line) * 7 + 1
     boundaryDate = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
-    today_date = getTodayDate()
+    onedayAfter = 1
+    today_date = (datetime.now() + timedelta(days=onedayAfter)).date().strftime("%d/%m/%Y")
     empty = True
     string = ""
     for Task in taskList:
@@ -586,7 +592,8 @@ def DLFinderByDays(line):
     type_ = extractType(line)
     daysToGo = getNdays(line) + 1
     boundaryDate = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
-    today_date = getTodayDate()
+    onedayAfter = 1
+    today_date = (datetime.now() + timedelta(days=onedayAfter)).date().strftime("%d/%m/%Y")
     empty = True
     string = ""
     for Task in taskList:
