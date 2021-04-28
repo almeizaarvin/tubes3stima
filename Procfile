@@ -1,2 +1,2 @@
-web: gunicorn src.Bobobot.wsgi --log-file -
+web: gunicorn --pythonpath src app.Bobobot
 
