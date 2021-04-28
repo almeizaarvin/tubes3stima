@@ -1,2 +1,3 @@
-web: gunicorn src.Bobobot:app
+web:gunicorn app:Bobobot
+
 
