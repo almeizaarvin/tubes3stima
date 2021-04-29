@@ -1,1 +1,1 @@
-web:gunicorn --pythonpath src app.Bobobot
+reminder:python src/Bobobot.py
