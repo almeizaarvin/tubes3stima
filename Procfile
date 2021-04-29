@@ -1,1 +1,1 @@
-web: sh -c 'cd ./src/ && exec gunicorn Bobobot'
+web: sh -c 'cd ./src/ && exec Bobobot'
