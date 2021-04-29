@@ -1,1 +1,1 @@
-web: sh -c 'cd ./src/ && exec Bobobot'
+web: gunicorn --pythonpath src app.Bobobot
