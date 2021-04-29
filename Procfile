@@ -1,1 +1,1 @@
-reminder:python src/Bobobot.py
+web: sh -c 'cd ./src/ && exec gunicorn Bobobot'
