@@ -5,6 +5,7 @@ chardet==4.0.0
 cryptography==2.1.4
 enum34==1.1.6
 folium==0.8.3
+gunicorn==19.9.0
 idna==2.10
 ipaddress==1.0.17
 Jinja2==2.11.3
