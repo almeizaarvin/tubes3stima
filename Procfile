@@ -1,1 +1,1 @@
-web:gunicorn --log-file=- src.Bobobot:app
+web: gunicorn src.Bobobot:app
