@@ -729,38 +729,3 @@ def helpMenu():
             string+=", "
             
     return string
-
-#///////////////////////////////////////////
-
-
-types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords = generateKeywords(types, deadline, finishkeywords, 
-                                                                                                            helpkeywords, months, topickeywords, datekeywords, untilnowkeywords)
-
-taskList = makeTaskList(readFile("taskList.txt"))
-
-#////////////////////////////////
-def inputIdentify(deadline, types, line):
-    if(isUpdate(deadline, line)):
-        return "UpdateDL"
-    elif(isTask(types, line)):
-        return "Task"
-    elif(isDLFinderBetweenDates(line)):
-        return "DLFinderBetweenDates"
-    elif(isDLUntilNow(line)):
-        return "DLUntilNow"
-    elif(isDLFinderBySubject(line)):
-        return "DLFinderBySubject"
-    elif(isDLFinderByWeeks(line)):
-        return "DLFinderByWeeks"
-    elif(isDLFinderByDays(line)):
-        return "DLFinderByDays"
-    elif(isDLToday(line)):
-        return "DLToday"    
-    elif(isMarkFinished(line)):
-        return "MarkFinished"
-    elif(isHelpMenu(line)):
-        return "HelpMenu"
-    else:
-        return "Hah? Gimana? Ngomong apa? Coba ketik 'help' biar tau..."
-
-#/////////////////////////////
