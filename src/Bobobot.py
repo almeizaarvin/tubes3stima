@@ -1,3 +1,13 @@
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+app.static_folder = 'static'
+	@@ -48,4 +46,722 @@ def contributors():
+    return render_template("contributors.html")
+
+if __name__ == "__main__":
+    app.run(debug = True) 
+
 
 #/////////////////////////////////////////
 
@@ -680,7 +690,9 @@ def helpMenu():
 
     return string
 
+
 #///////////////////////////////////////////
+
 
 types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords = generateKeywords(types, deadline, finishkeywords, 
                                                                                                             helpkeywords, months, topickeywords, datekeywords, untilnowkeywords)
@@ -711,13 +723,3 @@ def inputIdentify(deadline, types, line):
         return "HelpMenu"
     else:
         return "Hah? Gimana? Ngomong apa? Coba ketik 'help' biar tau..."
-
-
-
-
-    #//////////////////////////////////////////////
-
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
-app.static_folder = 'static'
