@@ -44,32 +44,43 @@ def get_bot_response():
 @app.route('/contributors/')
 def contributors():
     return render_template("contributors.html")
-
+    
 if __name__ == "__main__":
     app.run(debug = True) 
 
-#/////////////////////
+
+#/////////////////////////////////////////
 
 import re
 from datetime import *
+
 global types
 types = []
+
 global taskList
 taskList = []
+
 global deadline
 deadline = []
+
 global finishkeywords
 finishkeywords = []
+
 global helpkeywords
 helpkeywords = []
+
 global months
 months = []
+
 global topickeywords
 topickeywords = []
+
 global datekeywords
 datekeywords = []
+
 global untilnowkeywords
 untilnowkeywords = []
+
 #============================FUNGSI READFILE DAN GENERATE KEYWORDS============================
 # Membaca masukan dari file txt
 def readFile(filename):
@@ -77,6 +88,8 @@ def readFile(filename):
     with open(filename) as f:
         lines = f.read().splitlines()
     return lines
+
+
 def generateKeywords(types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords):
     try:
         types = readFile('types.txt')
@@ -98,8 +111,12 @@ def generateKeywords(types, deadline, finishkeywords, helpkeywords, months, topi
         datekeywords = []
         untilnowkeywords = []
         return types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords
+
 types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords = generateKeywords(types, deadline, finishkeywords, 
                                                                                                             helpkeywords, months, topickeywords, datekeywords, untilnowkeywords)
+
+
+
 ##============================FUNGSI ALGORITMA BOYERMOORE=======================
 def lastOcc(arr, c):
     n = len(arr) - 1 #pengecekan dari paling belakang
@@ -109,6 +126,8 @@ def lastOcc(arr, c):
         else:
             return n
     return -1
+
+
 def boyerMoore(line, pattern):
     if(len(pattern) > len(line)):
         return -1
@@ -128,7 +147,13 @@ def boyerMoore(line, pattern):
                 l = lastOcc(line, c)
                 i = i + m - min(j, 1+l)
                 j = m - 1 
+
         return -1
+
+
+
+
+
 ##==========================KELAS DAN FUNGSI TASK==================================
 class Task:
     def __init__(self, types, line):
@@ -141,6 +166,7 @@ class Task:
         else:
             self.topic="[Tidak spesifik]"
         self.status="Unfinished"
+
 def isTask(types, line):
     try:
         if(extractDate(line)!= None and extractSubject(line)!=None and extractType(line)!=None):
@@ -149,6 +175,7 @@ def isTask(types, line):
             return False
     except:
         pass
+
 def addTask(Task):
     result = ""
     if(not isTaskinTasklist(Task)):
@@ -159,11 +186,13 @@ def addTask(Task):
         result = "Task sudah tercatat!"
         result += "<br>"
     return(result)
+
 def isTaskinTasklist(Task):
     for t in taskList:
         if (t.date == Task.date and t.subject == Task.subject and t.type == Task.type and t.topic == Task.topic):
             return True
     return False
+
 def printAllTask():
     daysToGo =  1
     today_date = (datetime.now() + timedelta(days=daysToGo)).date().strftime("%d/%m/%Y")
@@ -177,6 +206,7 @@ def printAllTask():
     if(empty):
         string = "Kamu tidak memiliki deadline task apapun!<br>"
     return string
+
 def printAllDeadline(line):
     type_ = extractType(line)
     daysToGo =  1
@@ -194,6 +224,7 @@ def printAllDeadline(line):
     if(empty):
         string = "Kamu tidak memiliki deadline task apapun!<br>"
     return string  
+
 def extractDate(line):
     try:
         pattern = extractDateFormat1(line)
@@ -208,6 +239,7 @@ def extractDate(line):
             return pattern
     except:
         return None
+
 def extractSubject(line):
     pattern = re.search(r'\b[a-zA-z]{2}\d{4}\b', line)
     if (pattern != None):
@@ -216,6 +248,7 @@ def extractSubject(line):
         subject = line[start:stop]
         return subject
     return None
+
 def extractType(line):
     for t in types:
         t_raw = r"{}".format(t)
@@ -225,6 +258,7 @@ def extractType(line):
             Stopidx = pattern.span()[1]
             return t
     return None
+
 def extractTopic(line):
     try:
         found = False
@@ -245,11 +279,15 @@ def extractTopic(line):
                 break
         if(not found):
             stopTopic = searchIdxDate(line)
+
         topic = line[startTopic:stopTopic-1]
         return topic
     except:
         return ""
+
+
 #============================FUNGSI INISIASI DAN SIMPAN TASKLIST============================
+
 def makeTaskList(lines):
     taskList = []
     for line in lines:
@@ -261,29 +299,38 @@ def makeTaskList(lines):
         T.topic = topic.capitalize()
         taskList.append(T)
     return taskList
+
 def turnToArr(taskList):
     arr_task = []
     for Task in taskList:
         t = str(Task.id)+"-"+Task.date+"-"+Task.subject+"-"+Task.type+"-"+Task.topic+"-"+Task.status
         arr_task.append(t)
     return arr_task
+
 def writeFile(arr_tasklist):
     f1=open('test/taskList.txt', 'w')
     for task in arr_tasklist:
         f1.write(task + "\n")
+
 #=================================FUNGSI-FUNGSI DATE==================================
 #1. Getter
+
 def getTodayDate():
     return datetime.now().date().strftime("%d/%m/%Y")
+
 def getDay(date):
     day,month,year = date.split('/')
     return day
+
 def getMonth(date):
     day,month,year = date.split('/')
     return month
+
 def getYear(date):
     day,month,year = date.split('/')
     return year
+
+
 def getNweeks(line):
     pattern = re.search("\d+ minggu", line, re.IGNORECASE)
     if(pattern==None):
@@ -292,6 +339,7 @@ def getNweeks(line):
         start = pattern.span()[0]
         stop = pattern.span()[1]
         string = line[start:stop]
+
         angka = re.findall("\d", string)
         n = 0
         satuan = 10**(len(angka)-1)
@@ -299,6 +347,7 @@ def getNweeks(line):
             n += int(angka[i])*satuan
             satuan//10
         return n
+
 def getNdays(line):
     pattern = re.search("\d+ hari", line, re.IGNORECASE)
     if(pattern==None):
@@ -307,6 +356,7 @@ def getNdays(line):
         start = pattern.span()[0]
         stop = pattern.span()[1]
         string = line[start:stop]
+
         angka = re.findall("\d", string)
         n = 0
         satuan = 10**(len(angka)-1)
@@ -314,19 +364,26 @@ def getNdays(line):
             n += int(angka[i])*satuan
             satuan//10
         return n
+
     
 #############
 #2. Date operations
+
 def isBefore(date1, date2):
     d1, m1, y1 = [int(x) for x in date1.split('/')]
     d2, m2, y2 = [int(x) for x in date2.split('/')]
+
     if date(y1, m1, d1) < date(y2, m2, d2):
         return True
     else:
         return False
   
+
+
+
 #############
 #3. Date format converter 
+
 def extractDateFormat1(line):
     listofDate = []
     pattern = re.findall(r'\d+[/ -]\d+[/ -]\d{4}', line)
@@ -336,6 +393,7 @@ def extractDateFormat1(line):
         p = changeFormatDate1(p)
         listofDate.append(p)
     return listofDate
+
 def extractDateFormat2(line):
     listofDate = []
     for m in months:
@@ -346,6 +404,7 @@ def extractDateFormat2(line):
                 p = changeFormatDate2(p)
                 listofDate.append(p)
     return listofDate
+
 def getMonthIdx(date):
     #mengembalikan nama bulan sebagai angka
     for i in range(12):
@@ -354,6 +413,7 @@ def getMonthIdx(date):
             month = str(i+1)
             month = makeTwoDigits(month)
             return month
+
 def changeFormatDate1(or_date):
     #get day,month,year
     day,month,year = or_date.split('/')
@@ -362,6 +422,7 @@ def changeFormatDate1(or_date):
     #formating
     formatted_date = day+'/'+month+'/'+year
     return formatted_date
+
 def makeTwoDigits(char_int):
     #formating angka biar dua digit
     if (int(char_int) < 10 and char_int[0] != '0'):
@@ -369,6 +430,7 @@ def makeTwoDigits(char_int):
     else:
         number = char_int
     return number
+
 def changeFormatDate2(or_date):
     #get year
     year = or_date[-4:]
@@ -380,6 +442,7 @@ def changeFormatDate2(or_date):
     #formating
     formatted_date = date+'/'+month+'/'+year
     return formatted_date
+
 def isDateValid(date):
     isValid = True
     day,month,year = date.split('/')
@@ -388,6 +451,7 @@ def isDateValid(date):
     except ValueError :
         isValid = False
     return isValid
+
 def searchIdxDate(line):
     pattern = re.search(r'\b\d+[/ -]\d+[/ -]\d{4}\b', line)
     if (pattern == None):
@@ -396,8 +460,11 @@ def searchIdxDate(line):
                 raw_m = r"{}".format(m)
                 pattern = re.search(r'\d+[/ -]'+raw_m+r'[/ -]\d{4}', line)
     return pattern.span()[0]
+
+
 #==================================INISIASI TASKLIST =======================================
 taskList = makeTaskList(readFile("taskList.txt"))
+
 #==================================FUNGSI UPDATE TASK=======================================
 def isUpdate(deadline, line):
     try:
@@ -409,6 +476,7 @@ def isUpdate(deadline, line):
         return False
     except:
         pass
+
 def updateDL(line, id_):
     if (isIDValid(id_)):
         if(extractDate(line) != None):
@@ -418,15 +486,18 @@ def updateDL(line, id_):
         return("Deadline Task " + str(id_) + " tidak berhasil di-update<br>")
     else:
         return("ID tidak valid<br>")
+
 def isIDValid(id_):
     if (id_>0) and (id_-1 < len(taskList)):
         return True
     return False
+
 def findID(line):
     pattern = re.search("task \d+", line, re.IGNORECASE)
     start = pattern.span()[0]
     stop = pattern.span()[1]
     string = line[start:stop]
+
     angka = re.findall("\d", string)
     id = 0
     satuan = 10**(len(angka)-1)
@@ -434,6 +505,7 @@ def findID(line):
         id += int(angka[i])*satuan
         satuan/10
     return id
+
 #==================================FUNGSI DLFINDER=======================================
 #1.  DLFINDER VALIDATORS
 def isDLUntilNow(line):
@@ -445,6 +517,8 @@ def isDLUntilNow(line):
         return False
     except:
         pass
+
+
 def isDLFinderBySubject(line):
     try:
         if(boyerMoore(line, "Deadline")!=-1 and extractSubject(line)!=None):
@@ -453,6 +527,7 @@ def isDLFinderBySubject(line):
             return False
     except:
         pass
+
 def isDLFinderBetweenDates(line):
     try:
         dates = extractDate(line)
@@ -461,6 +536,7 @@ def isDLFinderBetweenDates(line):
         return False
     except:
         pass
+
 def isDLFinderByWeeks(line):
     try:
         if (boyerMoore(line, "Deadline") != 1 and getNweeks(line) != -1):
@@ -476,6 +552,7 @@ def isDLFinderByDays(line):
         return False
     except:
         pass
+
 def isDLToday(line):
     try:
         if(boyerMoore(line, "Deadline")!=-1 and boyerMoore(line, "hari")!=-1 and boyerMoore(line, "ini")!=-1):
@@ -483,8 +560,11 @@ def isDLToday(line):
         return False   
     except:
         pass 
+
+
 #########################
 # 2. DL EXECUTORS
+
 def DLFinderBySubject(line):
     subjectkey = extractSubject(line)
     typekey = extractType(line)
@@ -507,6 +587,7 @@ def DLFinderBySubject(line):
     else:
         string = "Kamu tidak memiliki deadline task!"
     return string
+
  # 2.b.i Periode DATE_1 sampai DATE_2
 def DLFinderBetweenDates(line):
     dates = extractDate(line)
@@ -540,6 +621,7 @@ def DLToday(line):
     if(empty):
         string = "Kamu tidak memiliki deadline task!"
     return string
+
 def DLFinderByWeeks(line):
     type_ = extractType(line)
     daysToGo = getNweeks(line) * 7 + 1
@@ -558,6 +640,7 @@ def DLFinderByWeeks(line):
     if(empty):
         string = "Kamu tidak memiliki deadline task!"
     return string
+
 def DLFinderByDays(line):
     type_ = extractType(line)
     daysToGo = getNdays(line) + 1
@@ -576,7 +659,9 @@ def DLFinderByDays(line):
     if(empty):
         string = "Kamu tidak memiliki deadline task!"
     return string
+
 #===================================FUNGSI MARKFINISHED ========================================
+
 def isMarkFinished(line):
     try:
         for w in finishkeywords:
@@ -585,6 +670,7 @@ def isMarkFinished(line):
         return False
     except:
         pass
+
 def markFinished(line):
     taskID = findID(line)
     for t in taskList:
@@ -593,6 +679,11 @@ def markFinished(line):
             return("Status task berhasil diperbaharui")
             break
     return("ID task tidak ditemukan!")
+
+
+
+
+
 #===================================FUNGSI HELP ========================================
 def isHelpMenu(line):
     try:
@@ -602,6 +693,7 @@ def isHelpMenu(line):
         return False
     except:
         pass
+
 def helpMenu():
     string = ""
     string += "[FITUR]<br>"
@@ -610,22 +702,26 @@ def helpMenu():
     "<br>3. Menampilkan deadline dari suatu task tertentu"+
     "<br>4. Memperbaharui task tertentu"+
     "<br>5. Menandai bahwa suatu task sudah selesai dikerjakan<br>")
+
     string += "<br>[DAFTAR KEYWORD]<br>"
     string += "Tipe task : "
     for i in range (0, len(types)):
         string += types[i]
         if i != len(types)-1 :
             string +=", "
+
     string+="<br>Deadline task : "
     for i in range (0, len(deadline)):
         string+=deadline[i]
         if i != len(deadline)-1 :
             string += ", "
+
     string+="<br>Selesai task : "
     for i in range (0, len(finishkeywords)):
         string+=finishkeywords[i]
         if i != len(finishkeywords)-1 :
             string+=", "
+
     string+="<br>Need BoboBot Help ? "
     for i in range (0, len(helpkeywords)):
         string+=helpkeywords[i]
@@ -633,10 +729,16 @@ def helpMenu():
             string+=", "
             
     return string
+
+
 #///////////////////////////////////////////
+
+
 types, deadline, finishkeywords, helpkeywords, months, topickeywords, datekeywords, untilnowkeywords = generateKeywords(types, deadline, finishkeywords, 
                                                                                                             helpkeywords, months, topickeywords, datekeywords, untilnowkeywords)
+
 taskList = makeTaskList(readFile("taskList.txt"))
+
 #////////////////////////////////
 def inputIdentify(deadline, types, line):
     if(isUpdate(deadline, line)):
@@ -662,50 +764,4 @@ def inputIdentify(deadline, types, line):
     else:
         return "Hah? Gimana? Ngomong apa? Coba ketik 'help' biar tau..."
 
-
-
-
-    #//////////////////////////////////////////////
-
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
-app.static_folder = 'static'
-
-@app.route('/')
-def home():
-    return render_template("index.html")
-
-@app.route('/get')
-def get_bot_response():
-    line = request.args.get('msg')
-    command = inputIdentify(deadline, types, line)
-    botmsg = ""
-    if(command == "UpdateDL"):
-        idToUpdate = findID(line)
-        botmsg += updateDL(line, idToUpdate)
-        writeFile(turnToArr(taskList))
-    elif(command == "Task"):
-        T = Task(types, line)
-        botmsg += addTask(T)
-        writeFile(turnToArr(taskList))
-    elif(command=="DLUntilNow"):
-        botmsg += printAllDeadline(line)
-    elif(command =="DLFinderBySubject"):
-        botmsg += DLFinderBySubject(line)
-    elif(command == "DLFinderBetweenDates"):
-        botmsg += DLFinderBetweenDates(line)
-    elif(command == "DLFinderByWeeks"):
-        botmsg += DLFinderByWeeks(line)
-    elif(command == "DLFinderByDays"):
-        botmsg += DLFinderByDays(line)
-    elif(command =="DLToday"):
-        botmsg += DLToday(line)
-    elif(command =="MarkFinished"):
-        botmsg += markFinished(line)
-        writeFile(turnToArr(taskList))
-    elif(command == "HelpMenu"):
-        botmsg += helpMenu()
-    else:
-        botmsg = "Hah? Gimana? Ngomong apa? Coba ketik 'help' biar tau..."
-    return botmsg
+#/////////////////////////////
