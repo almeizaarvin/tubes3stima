@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from main import *
-from function import *
+from functions import *
 
 app = Flask(__name__)
 app.static_folder = 'static'
